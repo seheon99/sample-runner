@@ -1,6 +1,6 @@
 {
-  "name": "algorithm-helper",
-  "displayName": "Algorithm Helper",
+  "name": "sample-runner",
+  "displayName": "Sample Runner",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -10,18 +10,22 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:algorithm-helper.helloWorld"
+    "onCommand:sample-runner.checkSamples"
   ],
   "main": "./out/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:seheon99/sample-runner.git"
+  },
   "contributes": {
     "commands": [
       {
-        "command": "algorithm-helper.helloWorld",
-        "title": "Hello World"
+        "command": "sample-runner.checkSamples",
+        "title": "Check samples"
       }
     ],
     "configuration": {
-      "title": "Algorithm Helper",
+      "title": "Sample Runner",
       "properties": {
         "algorithm-helper.filepath-python": {
           "type": "string",

@@ -1,0 +1,69 @@
+{
+  "name": "algorithm-helper",
+  "displayName": "Algorithm Helper",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:algorithm-helper.helloWorld"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "algorithm-helper.helloWorld",
+        "title": "Hello World"
+      }
+    ],
+    "configuration": {
+      "title": "Algorithm Helper",
+      "properties": {
+        "algorithm-helper.filepath-python": {
+          "type": "string",
+          "default": "python",
+          "description": "The filepath of Python. Default: python"
+        },
+        "algorithm-helper.filepath-c": {
+          "type": "string",
+          "default": "cc",
+          "description": "The filepath of C Compiler. Default: cc"
+        },
+        "algorithm-helper.filepath-cpp": {
+          "type": "string",
+          "default": "c++",
+          "description": "C++ Compiler filepath. Default: c++"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "@vscode/test-electron": "^2.2.0",
+    "eslint": "^8.28.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.1.0",
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "axios": "^1.2.2",
+    "cheerio": "^1.0.0-rc.12"
+  }
+}

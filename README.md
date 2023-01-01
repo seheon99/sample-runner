@@ -10,3 +10,9 @@
 
 - `sample-runner.filepath-python`: 파이썬의 경로를 설정한다. 기본값은 `python`이다.
 - `sample-runner.filepath-cpp`: C++의 경로를 설정한다. 기본값은 `c++`이다.
+
+## How to use
+
+1. 문제를 풀고 있는 파일을 연다.
+2. `Command Palette` 를 열고 `Check Samples`을 선택한다.
+3. 결과를 확인한다.

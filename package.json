@@ -1,6 +1,7 @@
 {
   "name": "sample-runner",
   "displayName": "Sample Runner",
+  "publisher": "SeheonYu",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -21,7 +22,7 @@
     "commands": [
       {
         "command": "sample-runner.checkSamples",
-        "title": "Check samples"
+        "title": "Check Samples"
       }
     ],
     "configuration": {

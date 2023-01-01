@@ -41,7 +41,7 @@ async function findSample(id: number): Promise<Sample[]> {
 }
 
 async function testSample(pid: number, samples: Sample[]) {
-  const channel = vscode.window.createOutputChannel('Algorithm Helper');
+  const channel = vscode.window.createOutputChannel('Sample Runner');
   channel.show();
 
   channel.appendLine(`${pid}번 문제의 테스트를 시작합니다`);
@@ -58,10 +58,8 @@ async function testSample(pid: number, samples: Sample[]) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('algorithm-helper is now active!');
-
   let disposable = vscode.commands.registerCommand(
-    'algorithm-helper.helloWorld',
+    'algorithm-helper.checkSamples',
     async () => {
       const pid = await findProblemID();
       const samples = await findSample(pid);

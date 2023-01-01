@@ -59,7 +59,7 @@ async function testSample(pid: number, samples: Sample[]) {
 
 export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
-    'algorithm-helper.checkSamples',
+    'sample-runner.checkSamples',
     async () => {
       const pid = await findProblemID();
       const samples = await findSample(pid);

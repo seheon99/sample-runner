@@ -27,21 +27,15 @@ export class TimeoutException extends Error {
   }
 }
 
-export async function execute(input: string) {
-  const editor = vscode.window.activeTextEditor;
-  if (editor === undefined) {
-    throw new Error('편집기가 열려있지 않습니다');
-  }
-  editor.document.save();
-
-  const filename = editor.document.fileName;
-
+export async function execute(filename: string, input: string) {
   let result = '';
   if (filename.endsWith('.py')) {
     result = await executePython(filename, input);
   } else if (filename.endsWith('.cpp')) {
     await compileCpp(filename, 'a.out');
     result = await executeCpp('a.out', input);
+  } else {
+    throw new Error('지원하지 않는 확장자입니다');
   }
 
   return result.replace(/\r\n/g, '\n').trim();

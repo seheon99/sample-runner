@@ -46,6 +46,13 @@ async function findSample(id: number): Promise<Sample[]> {
 }
 
 async function testSample(pid: number, samples: Sample[]) {
+  const editor = vscode.window.activeTextEditor;
+  if (editor === undefined) {
+    throw new Error('편집기가 열려있지 않습니다');
+  }
+  editor.document.save();
+
+  const filename = editor.document.fileName;
   const channel = vscode.window.createOutputChannel('Sample Runner');
   channel.show();
 
@@ -54,7 +61,7 @@ async function testSample(pid: number, samples: Sample[]) {
     const { input, output } = sample;
 
     try {
-      const result = await execute(input);
+      const result = await execute(filename, input);
 
       if (result === output) {
         channel.appendLine('정답입니다 :)');

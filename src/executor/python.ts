@@ -46,7 +46,7 @@ export default async function executePython(
     executor.stdin.write(input);
     executor.stdin.end();
   } catch {
-    throw new RuntimeException('입력 스트림이 닫혀있습니다');
+    throw new RuntimeException('프로그램이 입력을 모두 받기 전 종료되었습니다');
   }
 
   let data = '';

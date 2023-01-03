@@ -2,7 +2,12 @@ import axios from 'axios';
 import { load } from 'cheerio';
 import * as vscode from 'vscode';
 
-import { execute } from './executor';
+import {
+  CompileException,
+  execute,
+  RuntimeException,
+  TimeoutException,
+} from './executor';
 
 interface Sample {
   input: string;
@@ -47,12 +52,36 @@ async function testSample(pid: number, samples: Sample[]) {
   channel.appendLine(`${pid}번 문제의 테스트를 시작합니다`);
   for (const sample of samples) {
     const { input, output } = sample;
-    const result = await execute(input);
 
-    if (result === output) {
-      channel.appendLine('정답입니다 :)');
-    } else {
-      channel.appendLine('오답입니다 :(');
+    try {
+      const result = await execute(input);
+
+      if (result === output) {
+        channel.appendLine('정답입니다 :)');
+      } else {
+        channel.appendLine('오답입니다 :(');
+        channel.appendLine('입력');
+        channel.appendLine(input);
+        channel.appendLine('');
+        channel.appendLine('정답');
+        channel.appendLine(output);
+        channel.appendLine('');
+        channel.appendLine('결과');
+        channel.appendLine(result);
+        channel.appendLine('');
+      }
+    } catch (error) {
+      if (error instanceof CompileException) {
+        channel.appendLine('컴파일에 실패했습니다 :(');
+        channel.appendLine(error.message);
+      } else if (error instanceof RuntimeException) {
+        channel.appendLine('실행에 실패했습니다 :(');
+        channel.appendLine(error.message);
+      } else if (error instanceof TimeoutException) {
+        channel.appendLine('시간 초과입니다 :(');
+      } else {
+        throw error;
+      }
     }
   }
 }

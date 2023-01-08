@@ -1,8 +1,6 @@
 import { spawn } from 'child_process';
 import * as vscode from 'vscode';
 
-import { RuntimeException } from '.';
-
 const python = vscode.workspace
   .getConfiguration('algorithm-helper')
   .get<string>('filepath-python');
@@ -14,51 +12,6 @@ async function checkEnvironment(): Promise<boolean> {
 
   const executor = spawn(python, ['--version']);
 
-  let data = '';
-  for await (const chunk of executor.stdout) {
-    data += chunk;
-  }
-
-  const exitCode = await new Promise<number>((resolve) => {
-    executor.on('close', (code) => {
-      resolve(code ?? 0);
-    });
-  });
-
-  if (exitCode !== 0 || data.startsWith('Python') === false) {
-    return false;
-  }
-
-  return true;
-}
-
-export default async function executePython(
-  filepath: string,
-  input: string,
-): Promise<string> {
-  if ((await checkEnvironment()) === false) {
-    throw new Error('파이썬 파일 경로가 설정되지 않았습니다');
-  }
-
-  const executor = spawn(python!, [filepath]);
-
-  try {
-    executor.stdin.write(input);
-    executor.stdin.end();
-  } catch {
-    throw new RuntimeException('프로그램이 입력을 모두 받기 전 종료되었습니다');
-  }
-
-  let data = '';
-  for await (const chunk of executor.stdout) {
-    data += chunk;
-  }
-
-  let error = '';
-  for await (const chunk of executor.stderr) {
-    error += chunk;
-  }
-
   const exitCode = await new Promise<number>((resolve) => {
     executor.on('close', (code) => {
       resolve(code ?? 0);
@@ -66,7 +19,17 @@ export default async function executePython(
   });
 
   if (exitCode !== 0) {
-    throw new RuntimeException(error);
+    return false;
   }
-  return data;
+  return true;
+}
+
+export async function getExecutor(source: string): Promise<Executor> {
+  if ((await checkEnvironment()) === false) {
+    throw new Error('파이썬 파일 경로가 설정되지 않았습니다');
+  }
+
+  return {
+    execute: { command: python!, args: [source] },
+  };
 }

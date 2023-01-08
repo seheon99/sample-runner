@@ -3,7 +3,8 @@
   "displayName": "Sample Runner",
   "publisher": "SeheonYu",
   "description": "",
-  "version": "0.0.4",
+  "icon": "image/icon.png",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -16,7 +17,7 @@
   "main": "./out/extension.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:seheon99/sample-runner.git"
+    "url": "https://github.com/seheon99/sample-runner.git"
   },
   "contributes": {
     "commands": [

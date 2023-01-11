@@ -1,5 +1,6 @@
 import { spawn } from 'child_process';
 import * as vscode from 'vscode';
+import { runCommand } from '.';
 
 const python = vscode.workspace
   .getConfiguration('algorithm-helper')
@@ -30,6 +31,7 @@ export async function getExecutor(source: string): Promise<Executor> {
   }
 
   return {
-    execute: { command: python!, args: [source] },
+    execute: async (input?: string) =>
+      await runCommand(python!, [source], input),
   };
 }

@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
 
-import { runCommand } from '../executor';
-
 export async function judge(
   executeCommand: Command,
   samples: Sample[],
@@ -9,7 +7,7 @@ export async function judge(
 ) {
   let success = 0;
   for (const sample of samples) {
-    const result = await runCommand(executeCommand, sample.input);
+    const result = await executeCommand(sample.input);
     printResult(outputChannel, sample.input, sample.output, result);
     if (result.exitCode === 0 && result.data === sample.output) {
       success += 1;

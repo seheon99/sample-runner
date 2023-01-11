@@ -13,10 +13,11 @@ export async function getExecutor(filename: string): Promise<Executor> {
 }
 
 export async function runCommand(
-  command: Command,
+  command: string,
+  args?: string[],
   input?: string,
 ): Promise<CommandResult> {
-  const process = spawn(command.command, command.args);
+  const process = spawn(command, args);
 
   const sigtermTimer = setTimeout(() => {
     process.kill('SIGTERM');

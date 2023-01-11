@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getExecutor, runCommand } from './executor';
+import { getExecutor } from './executor';
 import { judge } from './judger';
 import { findSample } from './sampler';
 
@@ -24,7 +24,10 @@ async function main() {
   outputChannel.show();
 
   if (executor.compile) {
-    await runCommand(executor.compile);
+    const { error, exitCode } = await executor.compile();
+    if (isError(exitCode, outputChannel, error)) {
+      return;
+    }
   }
 
   if (executor.execute) {
@@ -32,7 +35,11 @@ async function main() {
   }
 
   if (executor.cleanup) {
-    await runCommand(executor.cleanup);
+    const { error, exitCode } = await executor.cleanup();
+
+    if (isError(exitCode, outputChannel, error)) {
+      return;
+    }
   }
 }
 
@@ -45,4 +52,17 @@ async function findFilename(): Promise<string> {
 
   const filename = editor.document.fileName;
   return filename!;
+}
+
+function isError(
+  exitCode: number,
+  outputChannel: vscode.OutputChannel,
+  errorMessage: string,
+): boolean {
+  if (exitCode !== 0) {
+    outputChannel.appendLine(errorMessage);
+    vscode.window.showErrorMessage('Sample Runner: Error occured');
+    return true;
+  }
+  return false;
 }

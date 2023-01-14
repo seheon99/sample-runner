@@ -1,10 +1,20 @@
 import { spawn } from 'child_process';
 import * as vscode from 'vscode';
 import { runCommand } from '.';
+import { InvalidEnvironmentException } from '../common/exceptions/invalid-environment.exception';
 
-const python = vscode.workspace
-  .getConfiguration('algorithm-helper')
-  .get<string>('filepath-python');
+export async function getExecutor(source: string): Promise<Executor> {
+  if ((await checkEnvironment()) === false) {
+    throw new InvalidEnvironmentException(
+      `Python not available. Please check the configuration "${pythonConfigName}" in the settings.`,
+    );
+  }
+
+  return {
+    execute: async (input?: string) =>
+      await runCommand(python!, [source], input),
+  };
+}
 
 async function checkEnvironment(): Promise<boolean> {
   if (python === undefined) {
@@ -25,13 +35,8 @@ async function checkEnvironment(): Promise<boolean> {
   return true;
 }
 
-export async function getExecutor(source: string): Promise<Executor> {
-  if ((await checkEnvironment()) === false) {
-    throw new Error('파이썬 파일 경로가 설정되지 않았습니다');
-  }
+const pythonConfigName = 'algorithm-helper.filepath-python';
 
-  return {
-    execute: async (input?: string) =>
-      await runCommand(python!, [source], input),
-  };
-}
+const python = vscode.workspace
+  .getConfiguration(pythonConfigName.split('.')[0])
+  .get<string>(pythonConfigName.split('.')[1]);

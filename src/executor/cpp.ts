@@ -5,10 +5,13 @@ import { unlink } from 'node:fs';
 import * as vscode from 'vscode';
 import { v4 } from 'uuid';
 import { runCommand } from '.';
+import { InvalidEnvironmentException } from '../common/exceptions/invalid-environment.exception';
 
 export async function getExecutor(source: string): Promise<Executor> {
   if ((await checkEnvironment()) === false) {
-    throw new Error('C++ 파일 경로가 설정되지 않았습니다');
+    throw new InvalidEnvironmentException(
+      `C++ compiler not available. Please check the configuration "${cppConfigName}" in the settings.`,
+    );
   }
 
   if (platform === 'win32') {
@@ -67,6 +70,8 @@ async function checkEnvironment(): Promise<boolean> {
   return true;
 }
 
+const cppConfigName = 'algorithm-helper.filepath-cpp';
+
 const cpp = vscode.workspace
-  .getConfiguration('algorithm-helper')
-  .get<string>('filepath-cpp');
+  .getConfiguration(cppConfigName.split('.')[0])
+  .get<string>(cppConfigName.split('.')[1]);

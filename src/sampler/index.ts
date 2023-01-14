@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import axios from 'axios';
 import { load } from 'cheerio';
+import { InvalidUserInputException } from '../common/exceptions';
 
 export async function findSample(): Promise<Sample[]> {
   const problemID = await findProblemID();
@@ -30,7 +31,7 @@ async function findProblemID() {
   const problemId = parseInt(query!);
 
   if (Number.isNaN(problemId)) {
-    throw new Error('Please enter a number');
+    throw new InvalidUserInputException('Please enter a number for problem ID');
   }
   return problemId;
 }

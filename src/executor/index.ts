@@ -1,6 +1,8 @@
 import { spawn } from 'node:child_process';
+import * as pidusage from 'pidusage';
 import { getExecutor as getPythonExecutor } from './python';
 import { getExecutor as getCppExecutor } from './cpp';
+import { RuntimeErrorException } from '../common/exceptions';
 
 export async function getExecutor(filename: string): Promise<Executor> {
   if (filename.endsWith('.py')) {
@@ -30,7 +32,7 @@ export async function runCommand(
   if (process.stdin.writable) {
     process.stdin.end(input);
   } else if (input !== undefined) {
-    throw new Error('STDIN is not writable');
+    throw new RuntimeErrorException('STDIN is not writable');
   }
 
   let data = '';
